@@ -97,8 +97,8 @@ resource "aws_security_group" "sec_lb" {
   }
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -153,7 +153,19 @@ resource "aws_lb_listener" "alb_listener" {
     type             = "forward"
   }
 }
+resource "aws_lb_listener_rule" "redirect_http_to_https" {
+  listener_arn = "${aws_lb_listener.alb.arn}"
 
+  action {
+    type = "redirect"
+
+    redirect {
+      port        = "8080"
+      protocol    = "HTTP"
+      status_code = "HTTP_301"
+    }
+  }
+}
 resource "aws_s3_bucket" "softwareag-test-bucket" {
   bucket = "softwareag-test-bucket"
 }
