@@ -17,21 +17,25 @@ resource "aws_launch_configuration" "autoscale_launch" {
   lifecycle {
     create_before_destroy = true
   }
+
+  ebs_block_device {
+    device_name           = "/dev/sdh"
+    volume_type           = "gp2"
+    volume_size           = "30"
+    delete_on_termination = "true"
+  }
 }
-
-
 
 resource "aws_autoscaling_group" "autoscale_group" {
   launch_configuration = "${aws_launch_configuration.autoscale_launch.id}"
   vpc_zone_identifier  = ["${aws_subnet.PrivateSubnetA.id}", "${aws_subnet.PrivateSubnetB.id}", "${aws_subnet.PrivateSubnetC.id}"]
-  target_group_arns    = ["${aws_lb_target_group.alb_target_group.arn}"]
-  health_check_type    = "ELB"
-  min_size             = "3"
-  max_size             = "3"
+  load_balancers       = ["${aws_lb.alb.name}"]
+  min_size             = 3
+  max_size             = 3
   tag {
     key                 = "Name"
+    value               = "autoscale"
     propagate_at_launch = true
-    value               = "autoscaling"
   }
 }
 
@@ -91,17 +95,9 @@ resource "aws_lb" "alb" {
   security_groups = ["${aws_security_group.sec_lb.id}"]
   internal        = false
   idle_timeout    = 60
-
-  access_logs {
-    bucket = "${var.s3_bucket}"
-    prefix = "ELB-logs"
-  }
-
   tags = {
     Name = "alb"
   }
-
-
 }
 
 resource "aws_lb_target_group" "alb_target_group" {
@@ -139,6 +135,34 @@ resource "aws_lb_listener" "alb_listener" {
 
   default_action {
     target_group_arn = "${aws_lb_target_group.alb_target_group.arn}"
-    type             = "redirect"
+    type             = "forward"
   }
+}
+
+resource "aws_s3_bucket" "softwareag-test-bucket" {
+  bucket = "softwareag-test-bucket"
+}
+
+resource "aws_s3_bucket_policy" "softwareag-test-bucket" {
+  bucket = "${aws_s3_bucket.softwareag-test-bucket.id}"
+
+  policy = <<POLICY
+  {
+      "Version": "2012-10-17",
+   "Statement": [
+       {
+           "Sid": "ListObjectsInBucket",
+           "Effect": "Allow",
+           "Action": ["s3:ListBucket"],
+           "Resource": ["arn:aws:s3:::softwareag-test-bucket"]
+       },
+       {
+           "Sid": "AllObjectActions",
+           "Effect": "Allow",
+           "Action": "s3:*Object",
+           "Resource": ["arn:aws:s3:::softwareag-test-bucket/*"]
+       }
+   ]
+    }
+    POLICY
 }
