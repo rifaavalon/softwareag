@@ -5,6 +5,12 @@ terraform {
     region = "us-west-2"
   }
 }
+
+# resource "tls_private_key" "auth" {
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
+# }
+
 resource "aws_key_pair" "auth" {
   key_name   = "${var.key_name}"
   public_key = "${file(var.public_key_path)}"
