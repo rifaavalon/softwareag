@@ -6,14 +6,16 @@ terraform {
   }
 }
 
-# resource "tls_private_key" "auth" {
-#   algorithm = "RSA"
-#   rsa_bits  = 4096
-# }
+/* resource "tls_private_key" "auth" {
+   algorithm = "RSA"
+   rsa_bits  = 4096
+ }
+ */
 
 resource "aws_key_pair" "auth" {
   key_name   = "${var.key_name}"
   public_key = "${file(var.public_key_path)}"
+  # public_key = "${tls_private_key.auth.public_key_openssh}"
 }
 
 resource "aws_launch_configuration" "autoscale_launch" {
