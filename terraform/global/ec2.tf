@@ -1,3 +1,10 @@
+terraform {
+  backend "s3" {
+    bucket = "softwareag-remote-state-global"
+    key    = "terraform.tfstate"
+    region = "us-west-2"
+  }
+}
 resource "aws_key_pair" "auth" {
   key_name   = "${var.key_name}"
   public_key = "${file(var.public_key_path)}"
