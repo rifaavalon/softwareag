@@ -1,4 +1,6 @@
-
+provider "aws" {
+  region = "us-west-2"
+}
 /* resource "tls_private_key" "auth" {
    algorithm = "RSA"
    rsa_bits  = 4096

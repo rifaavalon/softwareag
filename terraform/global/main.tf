@@ -1,3 +1,4 @@
+
 terraform {
   backend "s3" {
     bucket         = "softwareag-remote-state-global"
@@ -7,10 +8,12 @@ terraform {
   }
 }
 
-
 provider "aws" {
-  region = "${var.aws_region}"
+  region     = "us-west-2"
+  access_key = "AKIARFEFHJTBNZ5ARUI6"
+  secret_key = "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"
 }
+
 
 # Declare the data source
 data "aws_availability_zones" "available" {}
