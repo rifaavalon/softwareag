@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "remote_state" {
 }
 
 resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
-  name           = "terraform-state-lock-dynamo"
+  name           = "terraform-state-lock"
   hash_key       = "LockID"
   read_capacity  = 20
   write_capacity = 20
@@ -31,4 +31,3 @@ resource "aws_dynamodb_table" "dynamodb-terraform-state-lock" {
     Name = "DynamoDB Terraform State Lock Table"
   }
 }
-

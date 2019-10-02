@@ -3,7 +3,7 @@ variable "prefix" {
 }
 
 variable "environment" {
-  default     = "global"
+  default     = "development"
   description = "Environment Name"
 }
 

@@ -1,11 +1,3 @@
-terraform {
-  backend "s3" {
-    bucket = "softwareag-remote-state-global"
-    key    = "terraform.tfstate"
-    region = "us-west-2"
-  }
-}
-
 /* resource "tls_private_key" "auth" {
    algorithm = "RSA"
    rsa_bits  = 4096
