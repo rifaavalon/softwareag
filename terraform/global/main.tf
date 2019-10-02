@@ -3,7 +3,7 @@ terraform {
     bucket         = "softwareag-remote-state-global"
     key            = "terraform.tfstate"
     region         = "us-west-2"
-    dynamodb_table = "terraform-lock"
+    dynamodb_table = "terraform-state-lock"
   }
 }
 
@@ -18,7 +18,7 @@ data "aws_availability_zones" "available" {}
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "softwareag-test"
+  name = "default"
   cidr = "10.0.0.0/16"
 
   azs             = ["us-west-2a", "us-west-2b", "us-west-2c"]

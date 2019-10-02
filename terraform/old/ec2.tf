@@ -145,8 +145,8 @@ resource "aws_lb_listener" "alb_listener" {
     type             = "forward"
   }
 }
-resource "aws_lb_listener_rule" "redirect_http_to_https" {
-  listener_arn = "${aws_lb_listener.alb.arn}"
+resource "aws_lb_listener_rule" "redirect_http_to_http" {
+  listener_arn = "${aws_lb_listener.alb_listener.arn}"
 
   action {
     type = "redirect"
