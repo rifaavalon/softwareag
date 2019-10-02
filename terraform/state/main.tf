@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "remote_state_global" {
-  source = "../terraform/remote_state"
+  source = "../modules/remote_state"
 
   environment = "global"
 }
