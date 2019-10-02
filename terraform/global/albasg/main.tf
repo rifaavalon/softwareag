@@ -4,7 +4,15 @@
    rsa_bits  = 4096
  }
  */
-
+data "terraform_remote_state" "vpc" {
+  backend = "s3"
+  config {
+    bucket         = "softwareag-remote-state-global"
+    key            = "terraform.tfstate"
+    region         = "us-west-2"
+    dynamodb_table = "terraform-state-lock"
+  }
+}
 resource "aws_key_pair" "auth" {
   key_name   = "${var.key_name}"
   public_key = "${file(var.public_key_path)}"
@@ -50,7 +58,7 @@ resource "aws_autoscaling_group" "autoscale_group" {
 resource "aws_security_group" "sec_web" {
   name        = "sec_web"
   description = "Used for autoscale group"
-  vpc_id      = "${aws_vpc.default.id}"
+  vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
 
   # HTTP access from anywhere
   ingress {
@@ -80,7 +88,7 @@ resource "aws_security_group" "sec_web" {
 
 resource "aws_security_group" "sec_lb" {
   name   = "sec_elb"
-  vpc_id = "${aws_vpc.default.id}"
+  vpc_id = "${data.terraform_remote_state.vpc.vpc_id}"
 
   egress {
     from_port   = 0
@@ -112,7 +120,7 @@ resource "aws_lb_target_group" "alb_target_group" {
   name     = "alb-target-group"
   port     = "80"
   protocol = "HTTP"
-  vpc_id   = "${aws_vpc.default.id}"
+  vpc_id   = "${data.terraform_remote_state.vpc.vpc_id}"
   tags = {
     name = "alb_target_group"
   }
@@ -159,6 +167,7 @@ resource "aws_lb_listener_rule" "redirect_http_to_http" {
     }
   }
 }
+
 resource "aws_s3_bucket" "softwareag-test-bucket" {
   bucket = "softwareag-test-bucket"
 }
