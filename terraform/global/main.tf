@@ -1,4 +1,3 @@
-
 terraform {
   backend "s3" {
     bucket         = "softwareag-remote-state-global"
@@ -73,30 +72,12 @@ resource "aws_launch_configuration" "autoscale_launch" {
   }
 }
 
-resource "aws_elb" "elb" {
-  name                      = "elb"
-  security_groups           = ["${aws_security_group.sec_lb.id}"]
-  subnets                   = "${module.vpc.public_subnets}"
-  cross_zone_load_balancing = true
-  health_check {
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 3
-    interval            = 30
-    target              = "HTTP:80/"
-  }
-  listener {
-    lb_port           = 80
-    lb_protocol       = "http"
-    instance_port     = "80"
-    instance_protocol = "http"
-  }
-}
+
 
 resource "aws_autoscaling_group" "autoscale_group" {
   launch_configuration = "${aws_launch_configuration.autoscale_launch.id}"
   vpc_zone_identifier  = "${module.vpc.private_subnets}"
-  load_balancers       = ["${aws_elb.elb.name}"]
+  target_group_arns    = ["${aws_lb_target_group.alb_target_group.arn}"]
   min_size             = 3
   max_size             = 3
   tag {
@@ -113,8 +94,8 @@ resource "aws_security_group" "sec_web" {
 
   # HTTP access from anywhere
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
