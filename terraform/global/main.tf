@@ -94,8 +94,8 @@ resource "aws_security_group" "sec_web" {
 
   # HTTP access from anywhere
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -119,7 +119,7 @@ resource "aws_security_group" "sec_web" {
 }
 
 resource "aws_security_group" "sec_lb" {
-  name   = "sec_elb"
+  name   = "sec_lb"
   vpc_id = "${module.vpc.vpc_id}"
 
   egress {
