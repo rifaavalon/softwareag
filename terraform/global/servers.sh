@@ -8,4 +8,6 @@ sed -i 's/80/8080/' /etc/nginx/nginx.conf
 systemctl enable nginx
 systemctl start nginx
 
-sed -i 's/localhost/buzser' /etc/nginx/nginx.conf 
+sed -i 's/localhost/buzser' /etc/nginx/nginx.conf
+
+reboot 

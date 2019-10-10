@@ -8,11 +8,7 @@ terraform {
 }
 
 
-provider "aws" {
-  region     = "us-west-2"
-  access_key = "AKIARFEFHJTBNX7LGRBD"
-  secret_key = "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"
-}
+
 
 
 # Declare the data source
