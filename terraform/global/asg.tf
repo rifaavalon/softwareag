@@ -7,11 +7,7 @@ resource "aws_launch_configuration" "autoscale_launch" {
   # key_name             = "${aws_key_pair.auth.id}"
   key_name = "softwareag"
   #  associate_public_ip_address = true
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo yum -y update
-              sudo yum -y install nginx
-              EOF
+  user_data = "${file("./servers.sh")}"
   lifecycle {
     create_before_destroy = true
   }
