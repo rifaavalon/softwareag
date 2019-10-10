@@ -4,7 +4,8 @@ resource "aws_launch_configuration" "autoscale_launch" {
   instance_type        = "t2.micro"
   iam_instance_profile = "${aws_iam_instance_profile.softwareagec2_profile.name}"
   security_groups      = ["${aws_security_group.sec_web.id}"]
-  key_name             = "${aws_key_pair.auth.id}"
+  # key_name             = "${aws_key_pair.auth.id}"
+  key_name = "softwareag"
   #  associate_public_ip_address = true
   user_data = <<-EOF
               #!/bin/bash
