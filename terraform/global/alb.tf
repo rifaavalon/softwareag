@@ -24,11 +24,7 @@ resource "aws_lb_target_group" "alb_target_group" {
   tags = {
     name = "alb_target_group"
   }
-  stickiness {
-    type            = "lb_cookie"
-    cookie_duration = 1800
-    enabled         = true
-  }
+
   health_check {
     healthy_threshold   = 3
     unhealthy_threshold = 10
@@ -57,5 +53,16 @@ resource "aws_lb_listener" "alb_listener" {
       protocol    = "HTTP"
       status_code = "HTTP_301"
     }
+  }
+}
+
+resource "aws_lb_listener" "alb_listener1" {
+  load_balancer_arn = "${aws_lb.alb.arn}"
+  port              = 8080
+  protocol          = "HTTP"
+
+  default_action {
+    target_group_arn = "${aws_lb_target_group.alb_target_group.arn}"
+    type             = "forward"
   }
 }

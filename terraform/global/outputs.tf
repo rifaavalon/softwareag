@@ -37,3 +37,7 @@ output "azs" {
   description = "A list of availability zones spefified as argument to this module"
   value       = module.vpc.azs
 }
+
+output "alb_dns_name" {
+  value = "${aws_lb.alb.dns_name}"
+}

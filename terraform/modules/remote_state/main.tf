@@ -1,10 +1,10 @@
 provider "aws" {
   region = "us-west-2"
 }
-resource "aws_s3_bucket" "remote_state" {
-  bucket = "${var.prefix}-remote-state-${var.environment}"
-  acl    = "private"
-
+resource "aws_s3_bucket" "buzser_remote_state" {
+  bucket        = "${var.prefix}-remote-state-${var.environment}"
+  acl           = "private"
+  force_destroy = true
   versioning {
     enabled = true
   }

@@ -1,12 +1,15 @@
 terraform {
   backend "s3" {
-    bucket         = "softwareag-remote-state-global"
+    bucket         = "buzser-remote-state-global"
     key            = "terraform.tfstate"
     region         = "us-west-2"
     dynamodb_table = "terraform-state-lock"
   }
 }
 
+provider "aws" {
+  region = "us-west-2"
+}
 
 
 
@@ -87,6 +90,12 @@ resource "aws_security_group" "sec_lb" {
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

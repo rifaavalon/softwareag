@@ -1,11 +1,12 @@
 
 resource "aws_launch_configuration" "autoscale_launch" {
-  image_id             = "${lookup(var.aws_amis, var.aws_region)}"
-  instance_type        = "t2.micro"
-  iam_instance_profile = "${aws_iam_instance_profile.softwareagec2_profile.name}"
-  security_groups      = ["${aws_security_group.sec_web.id}"]
+  image_id                    = "${lookup(var.aws_amis, var.aws_region)}"
+  instance_type               = "t2.micro"
+  iam_instance_profile        = "${aws_iam_instance_profile.softwareagec2_profile.name}"
+  security_groups             = ["${aws_security_group.sec_web.id}"]
+  associate_public_ip_address = "true"
   # key_name             = "${aws_key_pair.auth.id}"
-  key_name = "softwareag"
+  key_name = "buzser"
   #  associate_public_ip_address = true
   user_data = "${file("./servers.sh")}"
   lifecycle {

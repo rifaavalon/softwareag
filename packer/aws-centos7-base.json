@@ -56,7 +56,7 @@
     "ebs_optimized": false,
     "ena_support": false,
     "force_delete_snapshot": true,
-    "encrypt_boot": false,
+    "encrypt_boot": true,
     "run_tags": {
       "Name": "softwareag",
       "Creator": "{{user `username`}}",

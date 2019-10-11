@@ -12,7 +12,7 @@ variable "aws_region" {
 # Ubuntu Precise 16.04 LTS (x64)
 variable "aws_amis" {
   default = {
-    us-west-2 = "ami-0c3a124c16e13f1e2"
+    us-west-2 = "ami-01ed306a12b7d1c96"
   }
 }
 
